@@ -1,6 +1,7 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "./Navbar";
+import { RainbowProvider } from "./RainbowProvider";
 
 const roboto = Roboto({
   weight: "400",
@@ -14,13 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.className}`}
-      >
+      <body className={`${roboto.className}`}>
+        <RainbowProvider>
           <div className="relative mx-auto w-full">
-            <Navbar/>
+            <Navbar />
             {children}
           </div>
+        </RainbowProvider>
       </body>
     </html>
   );

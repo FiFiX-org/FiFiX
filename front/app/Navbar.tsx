@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { PropsWithChildren } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 interface OwnProps {}
 
@@ -11,7 +12,7 @@ export function Navbar(props: Props) {
       <div className="flex">
         <Image src="./Logo.svg" alt="FiFix" width={100} height={50} />
         <div className="flex-1" />
-        <button className="btn">Connect Wallet</button>
+        <ConnectButton></ConnectButton>
       </div>
     </header>
   );
