@@ -1,6 +1,8 @@
 
 export default function Home() {
   return (
-    <div>Home Page</div>
+    <div className="mt-16 flex items-center justify-center w-full">
+      Home Page
+    </div>
   );
 }
