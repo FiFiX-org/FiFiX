@@ -1,4 +1,4 @@
-export const FiFiXAddress = "0xe9e6Fc8767ACdCa691860510c3c929fB9Fb9ecaB";
+export const FiFiXAddress = "0xbDC333C574a7C6AE77e93bfBf2cF6F30a9e401f3";
 export interface Token{
     address:`0x${string}`,
     chain:string,
