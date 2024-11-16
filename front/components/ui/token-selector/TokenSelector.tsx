@@ -27,7 +27,7 @@ export function TokenSelector(props: Props) {
       <Anchor>
         <button
           style={{ background: state === "short" ? "#FFD3DD" : "#CEF7F1" }}
-          className="block rounded-3xl mt-1 p-2"
+          className="block rounded-3xl mt-1 p-2.5"
           onClick={handleToggle}
         >
           {token ? (

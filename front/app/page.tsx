@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dialog";
 import { NumberOutput } from "@/components/ui/outputs/NumberOutput";
 import Image from "next/image";
-import { ToastTitle } from "@/components/ui/toast";
 
 export default function Home() {
   const account = useAccount();
@@ -25,7 +24,7 @@ export default function Home() {
 
   const [state, setState] = useState<"long" | "short">("long");
   const [pairToken, setPairToken] = useState<Token | null>(null);
-  const [volum, setVolum] = useState<string>("");
+  const [volume, setVolume] = useState<string>("");
   const [amount, setAmount] = useState<number>(2);
   const [tlb, setTlb] = useState<boolean>(false);
   const [takeProfit, setTakeProfit] = useState<string>("");
@@ -37,7 +36,7 @@ export default function Home() {
   const onChangeVolum = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!Number.isNaN(Number(value))) {
-      setVolum(value);
+      setVolume(value);
     }
   };
 
@@ -59,7 +58,7 @@ export default function Home() {
       setPairToken(token);
       toast({
         icon: <Image src="/TickIcon.svg" alt="Tick" width={15} height={15} />,
-        title: 'Order Submitted Failed',
+        title: "Order Submitted Failed",
         description: "12 ETHUSD contracts failed at 3121.5 price",
       });
     },
@@ -106,8 +105,8 @@ export default function Home() {
             />
             <div>
               <input
-                placeholder="Volum"
-                value={volum}
+                placeholder="Volume"
+                value={volume}
                 onChange={onChangeVolum}
                 type="text"
                 className={`mt-4 rounded-md form-input w-full focus:border-gray-500 border focus:bg-white focus:ring-0 ${
@@ -130,42 +129,44 @@ export default function Home() {
               <span>$</span>
             </div>
             <div
-              className={`mt-4 rounded-md p-2.5 text-gray-500 w-full border ${
-                state === "short"
-                  ? "bg-[#FFFAFB] border-[#FFD3DD]"
-                  : "bg-[#F8FFFE] border-[#CAFBF2]"
-              }`}
+              className={`mt-4 rounded-md text-gray-500 w-full items-center flex`}
             >
-              <span>
-                Amount: <strong>{amount}</strong>
-              </span>
               <Slider
+                disabled={!pairToken}
                 value={[amount]}
                 onValueChange={(value) => setAmount(value[0])}
-                className="mt-4 py-2"
+                className="py-2 disabled:opacity-20"
+                style={{ opacity: !pairToken ? 0.3 : 1 }}
                 defaultValue={[2]}
                 max={3}
                 min={1}
                 step={0.25}
               ></Slider>
+              {pairToken && (
+                <span className="text-sm ml-4 w-[10%] text-nowrap">
+                  <strong>
+                    {amount} {pairToken?.symbol}
+                  </strong>
+                </span>
+              )}
             </div>
             <div
-              className={` mt-4 rounded-md p-2.5 text-gray-500 w-full border bg-[#E5ECEB] ${
+              className={` mt-4 rounded-md p-2.5 text-gray-500 w-full space-y-4 border bg-[#E5ECEB] ${
                 state === "short"
                   ? "bg-[#FFFAFB] border-[#FFD3DD]"
                   : "bg-[#F8FFFE] border-[#CAFBF2]"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span>Liquidation Price</span> <span>placeholder</span>
+                <span>Liquidation Price</span> <span>-</span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Position Margin</span>
-                <span>placeholder</span>
+                <span>-</span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Fee</span>
-                <span>placeholder</span>
+                <span>-</span>
               </div>
             </div>
             <div className="mt-4">
@@ -219,7 +220,7 @@ export default function Home() {
               <DialogTrigger asChild>
                 <button
                   className="btn w-full mt-4 disabled:opacity-30"
-                  disabled={!pairToken || !volum}
+                  disabled={!pairToken || !volume}
                 >
                   {state === "long" ? "Long" : "Short"}
                 </button>
