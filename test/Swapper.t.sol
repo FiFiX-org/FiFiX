@@ -19,6 +19,7 @@ Swapper public swapper;
     address public sepoliaUSDT = address(0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0);
     address public sepoliaaETHWBTC = address(0x1804Bf30507dc2EB3bDEbbbdd859991EAeF6EefF);
     address public sepoliaUSDC = address(0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8);
+    address public SepoliaWBTC = address(0x29f2D40B0605204364af54EC677bD022dA425d03);
     address public baseSepoliaUSDC = address(0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913);
     address public baseSepoliacbBTC = address(0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf);
     address public swapRouter = address(0xe49d2815C231826caB58017e214Bed19fE1c2dD4); // this is for sepolia testnet
@@ -27,13 +28,13 @@ Swapper public swapper;
     // address public poolAddressesProvider = address(0xe20fCBdBfFC4Dd138cE8b2E6FBb6CB49777ad64D); // this is for base sepolia 
     uint256 public initialAmount = 10 wei;
     uint8 public leverage = 2;
-    Currency public currency0 = Currency.wrap(sepoliaUSDT);
-    Currency public currency1 = Currency.wrap(sepoliaUSDC); 
+//    Currency public currency0 = Currency.wrap(sepoliaUSDT);
+//    Currency public currency1 = Currency.wrap(sepoliaUSDC);
     // Currency public currency0 = Currency.wrap(baseSepoliaUSDC);
     // Currency public currency1 = Currency.wrap(baseSepoliacbBTC); 
     // Currency public c0 = Currency.wrap(baseSepoliaUSDC);
     // Currency public c1 = Currency.wrap(baseSepoliacbBTC); 
-    Currency public c0 = Currency.wrap(sepoliaUSDT);
+    Currency public c0 = Currency.wrap(SepoliaWBTC);
     Currency public c1 = Currency.wrap(sepoliaUSDC); 
 
     function setUp() public {
