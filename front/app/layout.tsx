@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.className}`}>
         <RainbowProvider>
-          <div className="relative mx-auto w-full">
+          <div className=" relative w-full">
             <Navbar />
             {children}
           </div>
