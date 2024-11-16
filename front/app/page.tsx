@@ -3,9 +3,10 @@ import { useCallback, useState } from "react";
 import { Token } from "@/constants/tokens";
 import { Slider } from "@/components/ui/slider";
 import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
-import { useGetBalance } from "./hooks/useGetBalance";
+import { useGetBalance } from "@/hooks/useGetBalance";
 import { useAccount } from "wagmi";
 import { Positions } from "./Positions";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogHeader,
@@ -13,12 +14,15 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { NumberOutput } from "@/components/ui/outputs/NumberOutput";
+import Image from "next/image";
+import { ToastTitle } from "@/components/ui/toast";
 
 export default function Home() {
   const account = useAccount();
+  const { toast } = useToast();
+
   const [state, setState] = useState<"long" | "short">("long");
   const [pairToken, setPairToken] = useState<Token | null>(null);
   const [volum, setVolum] = useState<string>("");
@@ -26,7 +30,6 @@ export default function Home() {
   const [tlb, setTlb] = useState<boolean>(false);
   const [takeProfit, setTakeProfit] = useState<string>("");
   const [stopLoss, setStopLoss] = useState<string>("");
-
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const balance = useGetBalance(account, pairToken?.address ?? "");
@@ -54,6 +57,11 @@ export default function Home() {
   const handleChangeToken = useCallback(
     (token: Token) => {
       setPairToken(token);
+      toast({
+        icon: <Image src="/TickIcon.svg" alt="Tick" width={15} height={15} />,
+        title: 'Order Submitted Failed',
+        description: "12 ETHUSD contracts failed at 3121.5 price",
+      });
     },
     [setPairToken]
   );

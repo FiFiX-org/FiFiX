@@ -1,4 +1,5 @@
 import { Roboto } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { Navbar } from "./Navbar";
 import { RainbowProvider } from "./RainbowProvider";
@@ -22,6 +23,7 @@ export default function RootLayout({
             {children}
           </div>
         </RainbowProvider>
+        <Toaster />
       </body>
     </html>
   );
