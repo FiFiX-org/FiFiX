@@ -16,6 +16,7 @@ contract SwapperTest is Test{
 
 Swapper public swapper;
     address public owner = address(0x012bAC54348C0E635dCAc9D5FB99f06F24136C9A);
+    address public sepoliaSwapper = address(0xbDC333C574a7C6AE77e93bfBf2cF6F30a9e401f3);
     address public sepoliaUSDT = address(0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0);
     address public sepoliaaETHWBTC = address(0x1804Bf30507dc2EB3bDEbbbdd859991EAeF6EefF);
     address public sepoliaUSDC = address(0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8);
@@ -96,8 +97,9 @@ Swapper public swapper;
         // // initPoolAndAddLiquidity(c0, c1, IHooks(address(0)), 3000, SQRT_PRICE_1_1);
 
         // // Deploy the Swapper contract
-        swapper = new Swapper(owner, address(swapRouter), poolAddressesProvider);
-
+        // swapper = new Swapper(owner, address(swapRouter), poolAddressesProvider);
+        
+        swapper = Swapper(sepoliaSwapper);
         // Deal some tokens to the test contract and approve Swapper
         deal(Currency.unwrap(c1), address(this), initialAmount*5);
         deal(Currency.unwrap(c0), address(this), initialAmount*5);

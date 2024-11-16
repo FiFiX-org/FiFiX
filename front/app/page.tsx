@@ -1,10 +1,12 @@
 "use client";
 import { useCallback, useState } from "react";
-import { Token } from "@/constants/tokens";
+import { extraToken, FiFiXAddress, Token } from "@/constants/tokens";
 import { Slider } from "@/components/ui/slider";
 import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
 import { useGetBalance } from "@/hooks/useGetBalance";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract, useSimulateContract } from "wagmi";
+import { SwapperABI } from "@/ABIs/Swapper";
+import { zeroAddress } from "viem";
 import { Positions } from "./Positions";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -32,7 +34,48 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const balance = useGetBalance(account, pairToken?.address ?? "");
-
+  const { writeContract } = useWriteContract()
+  const result = useSimulateContract({
+    abi: SwapperABI,
+    address: FiFiXAddress,
+    functionName: 'openPosition',
+    args: [ {
+      currency0: pairToken?.address ?? '0x00',
+      currency1: extraToken?.address ?? '0x00',
+      fee: 3000,
+      tickSpacing: 60, // Replace with appropriate tick spacing
+      hooks: zeroAddress
+    },BigInt(volume),amount],
+  });
+  const Long = async (isLong: boolean) => {
+    // setLoading(true)
+    console.log("Variables",{
+      currency0: pairToken!.address,
+      currency1: extraToken.address,
+      fee: 3000,
+      tickSpacing: 60, // Replace with appropriate tick spacing
+      hooks: zeroAddress
+    })
+    const hash = writeContract({
+      address: FiFiXAddress,
+      abi: SwapperABI,
+      functionName: 'openPosition',
+      args: [ {
+          currency0: pairToken!.address,
+          currency1: extraToken.address,
+          fee: 3000,
+          tickSpacing: 60, // Replace with appropriate tick spacing
+          hooks: zeroAddress
+        },BigInt(volume),amount]
+      })
+    // const transaction = await publicClient.waitForTransactionReceipt({ hash })
+    // if (transaction.status === 'success')
+    //   router.push('/submissions')
+    // else {
+    //   setLoading(false)
+    //   updateEditionType('numbered')
+    // }
+  }
   const onChangeVolum = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!Number.isNaN(Number(value))) {
@@ -219,6 +262,7 @@ export default function Home() {
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
               <DialogTrigger asChild>
                 <button
+                onClick={()=>Long(true)}
                   className="btn w-full mt-4 disabled:opacity-30"
                   disabled={!pairToken || !volume}
                 >
