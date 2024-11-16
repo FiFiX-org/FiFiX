@@ -11,7 +11,9 @@ contract DeploySwapper is Script {
     address public swapRouter = address(0x456); // Replace with actual swapRouter address
     address public poolAddressesProvider = address(0x012bAC54348C0E635dCAc9D5FB99f06F24136C9A); // sepolia address provider 
     function run() external {
-        vm.startBroadcast();
+        uint privateKey = vm.envUint("DEV_PRIVATE_KEY");
+        address account = vm.addr(privateKey);
+        vm.startBroadcast(privateKey);
 
         Swapper swapper = new Swapper(owner,swapRouter,poolAddressesProvider);
 
