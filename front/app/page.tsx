@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
-import { validTokens } from "@/constants/tokens";
+import { useCallback, useState } from "react";
+import { Token, validTokens } from "@/constants/tokens";
 import { Slider } from "@/components/ui/slider";
+import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
 
 export default function Home() {
   const [state, setState] = useState<"long" | "short">("long");
-  const [pairToken, setPairToken] = useState<string>("");
+  const [pairToken, setPairToken] = useState<Token | null>(null);
   const [volum, setVolum] = useState<string>("");
   const [amount, setAmount] = useState<number>(2);
   const onChangeVolum = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,6 +15,10 @@ export default function Home() {
       setVolum(value);
     }
   };
+
+  const handleChangeToken = useCallback((token: Token)=> {
+    setPairToken(token)
+  },[setPairToken])
 
   return (
     <div className="mt-4 flex items-center justify-center p-8 w-full">
@@ -43,22 +48,7 @@ export default function Home() {
               : " bg-[#EBFFFC] border-[#59ECD2]"
           }`}
         >
-          <select
-            value={pairToken}
-            onChange={(e) => setPairToken(e.target.value)}
-            style={{ background: state === "short" ? "#FFD3DD" : "#CEF7F1" }}
-            className=" block rounded-3xl mt-1 border-transparent focus:ring-0 text-[#462684]"
-          >
-            <option value="" disabled>
-              Select pair token
-            </option>
-            {validTokens.map((token) => (
-              <option key={token.address} value={token.address}>
-                {token.symbol}
-              </option>
-            ))}
-          </select>
-
+          <TokenSelector state={state} token={pairToken} onChangeToken={handleChangeToken}/>
           <div>
             <input
               placeholder="Volum"

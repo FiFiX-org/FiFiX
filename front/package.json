@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.28",
     "@radix-ui/react-slider": "^1.2.1",
     "@rainbow-me/rainbowkit": "^2.2.0",
     "@tailwindcss/forms": "^0.5.9",
@@ -19,6 +20,7 @@
     "next": "^14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "resize-observer-polyfill": "^1.5.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^2.21.45",
