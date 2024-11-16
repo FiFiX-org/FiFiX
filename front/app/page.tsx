@@ -4,7 +4,7 @@ import { extraToken, FiFiXAddress, Token } from "@/constants/tokens";
 import { Slider } from "@/components/ui/slider";
 import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
 import { useGetBalance } from "@/hooks/useGetBalance";
-import { useAccount, useWriteContract, useSimulateContract } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { SwapperABI } from "@/lib/Swapper";
 import { zeroAddress } from "viem";
 import { Positions } from "./Positions";
@@ -17,7 +17,6 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { NumberOutput } from "@/components/ui/outputs/NumberOutput";
 import Image from "next/image";
 import { SpinnerButton } from "@/components/ui/LoadingButton";
 
@@ -268,9 +267,9 @@ export default function Home() {
               <DialogTrigger asChild>
                 <button
                   className="btn w-full mt-4 disabled:opacity-30"
-                  disabled={!pairToken || !volume}
+                  disabled={!pairToken || !volume || !account.address}
                 >
-                  {state === "long" ? "Long" : "Short"}
+                  {!account.address ? 'Connect You Wallet' :  state === "long" ? "Long" : "Short"}
                 </button>
               </DialogTrigger>
               <DialogContent className="shadow-md bg-[#F3F0FF]">
