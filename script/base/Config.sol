@@ -8,8 +8,8 @@ import {Currency} from "v4-core/src/types/Currency.sol";
 /// @notice Shared configuration between scripts
 contract Config {
     /// @dev populated with default anvil addresses
-    IERC20 constant token0 = IERC20(address(0x0783c014B3a423bEcfBC6e9a02D44a7a300155Da)); // weth sepolia
-    IERC20 constant token1 = IERC20(address(0xD98dfB6E59f38d6D5Ef265232dFA69a71D5CaaB0)); // usdc sepolia
+    IERC20 constant token0 = IERC20(address(0x29f2D40B0605204364af54EC677bD022dA425d03)); // wbtc sepolia
+    IERC20 constant token1 = IERC20(address(0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8)); // usdc sepolia
     IHooks constant hookContract = IHooks(address(0x0));
 
     Currency constant currency0 = Currency.wrap(address(token0));

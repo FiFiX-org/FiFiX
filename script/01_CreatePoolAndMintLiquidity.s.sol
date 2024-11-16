@@ -29,8 +29,8 @@ contract CreatePoolAndAddLiquidityScript is Script, Constants, Config {
     uint160 startingPrice = 79228162514264337593543950336; // floor(sqrt(1) * 2^96)
 
     // --- liquidity position configuration --- //
-    uint256 public token0Amount = 1e18;
-    uint256 public token1Amount = 1e18;
+    uint256 public token0Amount = 1e6;
+    uint256 public token1Amount = 1e6;
 
     // range of the position
     int24 tickLower = -600; // must be a multiple of tickSpacing
@@ -80,7 +80,9 @@ contract CreatePoolAndAddLiquidityScript is Script, Constants, Config {
         // if the pool is an ETH pair, native tokens are to be transferred
         uint256 valueToPass = currency0.isAddressZero() ? amount0Max : 0;
 
-        vm.startBroadcast();
+        uint privateKey = vm.envUint("DEV_PRIVATE_KEY");
+        address account = vm.addr(privateKey);
+        vm.startBroadcast(privateKey);
         tokenApprovals();
         vm.stopBroadcast();
 
