@@ -5,13 +5,13 @@ import { RainbowKitProvider, lightTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider, http, createConfig } from "wagmi";
 import { coinbaseWallet } from "wagmi/connectors";
 
-import { sepolia } from "wagmi/chains";
+import { sepolia,baseSepolia } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 const queryClient = new QueryClient();
 
 export const config = createConfig({
-  chains: [sepolia],
+  chains: [sepolia, baseSepolia],
   connectors: [
     coinbaseWallet({
       appName: "Uniswap",
@@ -20,6 +20,7 @@ export const config = createConfig({
   ],
   transports: {
     [sepolia.id]: http(),
+    [baseSepolia.id]:http()
   },
 });
 
