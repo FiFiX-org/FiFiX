@@ -6,6 +6,16 @@ import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
 import { useGetBalance } from "./hooks/useGetBalance";
 import { useAccount } from "wagmi";
 import { Positions } from "./Positions";
+import {
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { NumberOutput } from "@/components/ui/outputs/NumberOutput";
 
 export default function Home() {
   const account = useAccount();
@@ -16,6 +26,8 @@ export default function Home() {
   const [tlb, setTlb] = useState<boolean>(false);
   const [takeProfit, setTakeProfit] = useState<string>("");
   const [stopLoss, setStopLoss] = useState<string>("");
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const balance = useGetBalance(account, pairToken?.address ?? "");
 
@@ -195,9 +207,87 @@ export default function Home() {
                 />
               </div>
             )}
-            <button className="btn w-full mt-4">
-              {state === "long" ? "Long" : "Short"}
-            </button>
+            <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+              <DialogTrigger asChild>
+                <button
+                  className="btn w-full mt-4 disabled:opacity-30"
+                  disabled={!pairToken || !volum}
+                >
+                  {state === "long" ? "Long" : "Short"}
+                </button>
+              </DialogTrigger>
+              <DialogContent className="shadow-md bg-[#F3F0FF]">
+                <DialogHeader>
+                  <DialogTitle className="mb-4">
+                    {state === "short" ? (
+                      <span className="text-red-500">Limit Sell</span>
+                    ) : (
+                      <span className="text-[#3ACCB3]">Limit Buy</span>
+                    )}
+                    <span className="text-[#462684] ml-4">
+                      {pairToken?.symbol}
+                    </span>
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col text-sm space-y-4 text-[#462684]">
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Order Price</span>
+                    <span>3,131.00 USD</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Qty</span>
+                    <span>
+                      <NumberOutput value={3923} /> ETH
+                    </span>
+                  </div>{" "}
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Order Cost</span>
+                    <span>12,383.6075 USD</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Order value</span>
+                    <span>122,422.1000 USD</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Estimated Liq. Price</span>
+                    <span>5,538.63 USD</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Leverage</span>
+                    <span>Cross 10.00x</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Time in Force</span>
+                    <span>Good-till-Canceled</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">Initial Margin Rate</span>
+                    <span>Cross 10.00x</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[#9F92C1]">
+                      Maintenance Margin Rate
+                    </span>
+                    <span>Cross 10.00x</span>
+                  </div>
+                </div>
+                <DialogFooter className="flex w-full justify-between items-center mt-4">
+                  <button
+                    className={`w-1/2 ${
+                      state === "short" ? "bg-[#FF648E]" : "bg-[#3ACCB3]"
+                    } rounded-md px-4 py-2 text-white`}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    onClick={() => setModalOpen(false)}
+                    className="w-1/2 bg-[#AEA3CC] rounded-md px-4 py-2 text-white"
+                  >
+                    Cancel
+                  </button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>
