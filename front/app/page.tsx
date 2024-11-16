@@ -16,7 +16,7 @@ export default function Home() {
   const [takeProfit, setTakeProfit] = useState<string>("");
   const [stopLoss, setStopLoss] = useState<string>("");
 
-  const balance = useGetBalance(account,pairToken?.address ?? '');
+  const balance = useGetBalance(account, pairToken?.address ?? "");
 
   const onChangeVolum = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -95,7 +95,7 @@ export default function Home() {
               }`}
             />
           </div>
-          <div className="mt-4">Balance:{balance ?? ' -'}</div> 
+          <div className="mt-4">Balance:{balance ?? " -"}</div>
           <div
             className={`mt-4 rounded-md p-2.5 flex text-gray-500 w-full border ${
               state === "short"
@@ -128,15 +128,23 @@ export default function Home() {
             ></Slider>
           </div>
           <div
-            className={`mt-4 rounded-md p-2.5 text-gray-500 w-full border bg-[#E5ECEB] ${
+            className={` mt-4 rounded-md p-2.5 text-gray-500 w-full border bg-[#E5ECEB] ${
               state === "short"
                 ? "bg-[#FFFAFB] border-[#FFD3DD]"
                 : "bg-[#F8FFFE] border-[#CAFBF2]"
             }`}
           >
-            Liquidation Price <br />
-            Position Margin <br />
-            Fee
+            <div className="flex items-center justify-between">
+              <span>Liquidation Price</span> <span>placeholder</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Position Margin</span>
+              <span>placeholder</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>Fee</span>
+              <span>placeholder</span>
+            </div>
           </div>
           <div className="mt-4">
             <input
