@@ -69,7 +69,7 @@ contract  Swapper is FlashLoanSimpleReceiverBase{
         console.log("amount", params.amountSpecified);
         console.log("ZeroForOne", params.zeroForOne);
         console.log("Here We Are 2");
-        swapRouter.swap(key, params, testSettings, hookData);
+        // swapRouter.swap(key, params, testSettings, hookData);
         console.log("Here We Are 3");
 
     }

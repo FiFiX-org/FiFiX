@@ -179,7 +179,10 @@ Swapper public swapper;
     }
 
     function deal(address token, address to, uint256 amount) internal override{
-        vm.prank(address(0xa6c308A9BB47a88cb5c9c8575BA60626967451f2));
-        IERC20(token).transfer(to, amount);
+        vm.store(
+            token,
+            keccak256(abi.encode(to, uint256(0))),
+            bytes32(amount)
+        );
     }
 }
