@@ -1,11 +1,11 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { extraToken, FiFiXAddress, Token } from "@/constants/tokens";
 import { Slider } from "@/components/ui/slider";
 import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
 import { useGetBalance } from "@/hooks/useGetBalance";
 import { useAccount, useWriteContract, useSimulateContract } from "wagmi";
-import { SwapperABI } from "@/ABIs/Swapper";
+import { SwapperABI } from "@/lib/Swapper";
 import { zeroAddress } from "viem";
 import { Positions } from "./Positions";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { NumberOutput } from "@/components/ui/outputs/NumberOutput";
 import Image from "next/image";
+import { SpinnerButton } from "@/components/ui/LoadingButton";
 
 export default function Home() {
   const account = useAccount();
@@ -34,48 +35,58 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const balance = useGetBalance(account, pairToken?.address ?? "");
-  const { writeContract } = useWriteContract()
-  const result = useSimulateContract({
-    abi: SwapperABI,
-    address: FiFiXAddress,
-    functionName: 'openPosition',
-    args: [ {
-      currency0: pairToken?.address ?? '0x00',
-      currency1: extraToken?.address ?? '0x00',
-      fee: 3000,
-      tickSpacing: 60, // Replace with appropriate tick spacing
-      hooks: zeroAddress
-    },BigInt(volume),amount],
-  });
-  const Long = async (isLong: boolean) => {
-    // setLoading(true)
-    console.log("Variables",{
-      currency0: pairToken!.address,
-      currency1: extraToken.address,
-      fee: 3000,
-      tickSpacing: 60, // Replace with appropriate tick spacing
-      hooks: zeroAddress
-    })
-    const hash = writeContract({
+  const { writeContract, status, data, error } = useWriteContract();
+  useEffect(() => {
+    if (status === "success") {
+      toast({
+        icon: <Image src="TickIcon.svg" alt="tick" width={15} height={15} />,
+        title: "Successfull",
+        link: (
+          <a
+            className="mt-4 text-sm text-[#9F92C1] underline text-ellipsis max-w-80 text-nowrap overflow-hidden"
+            href={`https://eth-sepolia.blockscout.com/tx/${data}`}
+            target="_blank"
+          >{`https://eth-sepolia.blockscout.com/tx/${data}`}</a>
+        ),
+        description: "You can see transaction here:",
+      });
+      setModalOpen(false);
+    }
+    if (status === "error") {
+      toast({
+        icon: (
+          <Image
+            src="Warning.svg"
+            className="bg-red-600"
+            alt="tick"
+            width={15}
+            height={15}
+          />
+        ),
+        title: "Error",
+        description: <p className="text-nowrap text-ellipsis overflow-hidden">{error.message}</p>,
+      });
+      setModalOpen(false);
+    }
+  }, [data, status]);
+  const handleOpenPosition = () => {
+    writeContract({
       address: FiFiXAddress,
       abi: SwapperABI,
-      functionName: 'openPosition',
-      args: [ {
-          currency0: pairToken!.address,
+      functionName: "openPosition",
+      args: [
+        {
+          currency0: pairToken?.address ?? "0x",
           currency1: extraToken.address,
           fee: 3000,
           tickSpacing: 60, // Replace with appropriate tick spacing
-          hooks: zeroAddress
-        },BigInt(volume),amount]
-      })
-    // const transaction = await publicClient.waitForTransactionReceipt({ hash })
-    // if (transaction.status === 'success')
-    //   router.push('/submissions')
-    // else {
-    //   setLoading(false)
-    //   updateEditionType('numbered')
-    // }
-  }
+          hooks: zeroAddress,
+        },
+        BigInt(Math.ceil(Number(volume) * Math.pow(10, pairToken?.decimals ?? 1))),
+        amount * 10,
+      ],
+    });
+  };
   const onChangeVolum = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!Number.isNaN(Number(value))) {
@@ -99,11 +110,6 @@ export default function Home() {
   const handleChangeToken = useCallback(
     (token: Token) => {
       setPairToken(token);
-      toast({
-        icon: <Image src="/TickIcon.svg" alt="Tick" width={15} height={15} />,
-        title: "Order Submitted Failed",
-        description: "12 ETHUSD contracts failed at 3121.5 price",
-      });
     },
     [setPairToken]
   );
@@ -111,6 +117,8 @@ export default function Home() {
   const onChangeTlb = () => {
     setTlb((prev) => !prev);
   };
+
+  const orderValue = amount * Number(volume);
 
   return (
     <div className="container mx-auto">
@@ -159,7 +167,7 @@ export default function Home() {
                 }`}
               />
             </div>
-            <div className="mt-4">Balance:{balance ?? " -"}</div>
+            <div className="mt-4">Balance:{' '}{balance ?? " -"}</div>
             <div
               className={`mt-4 rounded-md p-2.5 flex text-gray-500 w-full border ${
                 state === "short"
@@ -169,8 +177,9 @@ export default function Home() {
             >
               <span>Price</span>
               <div className="flex-1"></div>
-              <span>$</span>
+              <span>{pairToken?.price}{' '}USDC</span>
             </div>
+            <div className="mt-4">Leverage: {amount}</div>
             <div
               className={`mt-4 rounded-md text-gray-500 w-full items-center flex`}
             >
@@ -183,12 +192,12 @@ export default function Home() {
                 defaultValue={[2]}
                 max={3}
                 min={1}
-                step={0.25}
+                step={0.1}
               ></Slider>
               {pairToken && (
-                <span className="text-sm ml-4 w-[10%] text-nowrap">
+                <span className="text-sm ml-4 w-[30%] text-nowrap overflow-hidden">
                   <strong>
-                    {amount} {pairToken?.symbol}
+                    {orderValue} {pairToken?.symbol}
                   </strong>
                 </span>
               )}
@@ -204,12 +213,8 @@ export default function Home() {
                 <span>Liquidation Price</span> <span>-</span>
               </div>
               <div className="flex items-center justify-between">
-                <span>Position Margin</span>
-                <span>-</span>
-              </div>
-              <div className="flex items-center justify-between">
                 <span>Fee</span>
-                <span>-</span>
+                <span>0.39%</span>
               </div>
             </div>
             <div className="mt-4">
@@ -262,7 +267,6 @@ export default function Home() {
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
               <DialogTrigger asChild>
                 <button
-                onClick={()=>Long(true)}
                   className="btn w-full mt-4 disabled:opacity-30"
                   disabled={!pairToken || !volume}
                 >
@@ -285,21 +289,21 @@ export default function Home() {
                 <div className="flex flex-col text-sm space-y-4 text-[#462684]">
                   <div className="flex justify-between">
                     <span className="text-[#9F92C1]">Order Price</span>
-                    <span>3,131.00 USD</span>
+                    <span>{pairToken?.price} {' '} USDC</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-[#9F92C1]">Qty</span>
                     <span>
-                      <NumberOutput value={3923} /> ETH
+                      {orderValue}{' '} {pairToken?.symbol}
                     </span>
                   </div>{" "}
                   <div className="flex justify-between">
-                    <span className="text-[#9F92C1]">Order Cost</span>
-                    <span>12,383.6075 USD</span>
+                    <span className="text-[#9F92C1]">Order Value</span>
+                    <span>{orderValue * (pairToken?.price ?? 1)}{' '}USDC</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#9F92C1]">Order value</span>
-                    <span>122,422.1000 USD</span>
+                    <span className="text-[#9F92C1]">Fee</span>
+                    <span>{orderValue * (pairToken?.price ?? 1) * 0.0039} (0.39%){' '} USDC</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-[#9F92C1]">Estimated Liq. Price</span>
@@ -307,32 +311,22 @@ export default function Home() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-[#9F92C1]">Leverage</span>
-                    <span>Cross 10.00x</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#9F92C1]">Time in Force</span>
-                    <span>Good-till-Canceled</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#9F92C1]">Initial Margin Rate</span>
-                    <span>Cross 10.00x</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#9F92C1]">
-                      Maintenance Margin Rate
-                    </span>
-                    <span>Cross 10.00x</span>
+                    <span>{amount}x</span>
                   </div>
                 </div>
                 <DialogFooter className="flex w-full justify-between items-center mt-4">
-                  <button
+                  <SpinnerButton
+                    loading={status === "pending"}
+                    disabled={status === "pending"}
+                    onClick={handleOpenPosition}
                     className={`w-1/2 ${
                       state === "short" ? "bg-[#FF648E]" : "bg-[#3ACCB3]"
                     } rounded-md px-4 py-2 text-white`}
                   >
                     Confirm
-                  </button>
+                  </SpinnerButton>
                   <button
+                    disabled={status === "pending"}
                     onClick={() => setModalOpen(false)}
                     className="w-1/2 bg-[#AEA3CC] rounded-md px-4 py-2 text-white"
                   >

@@ -18,6 +18,7 @@ export function Toaster() {
       {toasts.map(function ({
         id,
         title,
+        link,
         icon,
         description,
         action,
@@ -32,6 +33,7 @@ export function Toaster() {
                 {description && (
                   <ToastDescription>{description}</ToastDescription>
                 )}
+                {link && link}
               </div>
               {action}
             </div>

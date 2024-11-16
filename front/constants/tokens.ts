@@ -6,6 +6,7 @@ export interface Token{
     symbol:string,
     decimals:number,
     name: string,
+    price: number,
 }
 export const validTokens:Token[]=[
     {
@@ -15,6 +16,7 @@ export const validTokens:Token[]=[
         decimals:6,
         symbol:"ETH",
         name: 'Etherem',
+        price: 3225,
     },
     {
         address:"0x29f2D40B0605204364af54EC677bD022dA425d03",
@@ -22,7 +24,8 @@ export const validTokens:Token[]=[
         logo:"/TETHER.svg",
         decimals:8,
         symbol:"WBTC",
-        name: 'Wrapped BTC'
+        name: 'Wrapped BTC',
+        price: 88956
     },
     {
         address:"0x29f2d40b0605204364af54ec677bd022da425d03",
@@ -30,7 +33,8 @@ export const validTokens:Token[]=[
         logo:"/UNISWAP.svg",
         decimals:8,
         symbol:"UNI",
-        name: 'Uniswap'
+        name: 'Uniswap',
+        price: 7.8
     },
     {
         address:"0x29f2d40b0605204364af54ec677bd022da425d03",
@@ -38,7 +42,8 @@ export const validTokens:Token[]=[
         logo:"/AAVE.svg",
         decimals:8,
         symbol:"AAVE",
-        name: 'Aave Token'
+        name: 'Aave Token',
+        price: 167
     },
     {
         address:"0x29f2d40b0605204364af54ec677bd022da425d03",
@@ -46,7 +51,8 @@ export const validTokens:Token[]=[
         logo:"/CHAIN_LINK.svg",
         decimals:8,
         symbol:"LINK",
-        name: 'ChainLink'
+        name: 'ChainLink',
+        price: 14.5
     }
 ]
 
@@ -56,6 +62,7 @@ export const extraToken:Token = {
     logo:"/USD.svg",
     decimals:6,
     symbol:"USDC",
-    name: 'USD Coin'
+    name: 'USD Coin',
+    price: 1
 }
 export const tokenMaps = new Map<string, Token>(validTokens.map(item=> [item.address, item]))
