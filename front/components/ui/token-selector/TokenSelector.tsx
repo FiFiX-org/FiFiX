@@ -59,8 +59,8 @@ export function TokenSelector(props: Props) {
           )}
         </button>
       </Anchor>
-      <Popover width={"200px"}>
-        <div className="bg-[#F8FFFE] p-2 shadow-xl rounded-md text-sm w-72">
+      <Popover>
+        <div className="bg-[#F8FFFE] p-2 shadow-xl rounded-md text-sm w-80">
           {validTokens.map((token, index) => (
             <div
               className="w-full flex items-center cursor-pointer hover:bg-slate-100 hover:rounded-lg"
