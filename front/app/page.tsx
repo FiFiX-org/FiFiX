@@ -3,8 +3,11 @@ import { useCallback, useState } from "react";
 import { Token } from "@/constants/tokens";
 import { Slider } from "@/components/ui/slider";
 import { TokenSelector } from "../components/ui/token-selector/TokenSelector";
+import { useGetBalance } from "./hooks/useGetBalance";
+import { useAccount } from "wagmi";
 
 export default function Home() {
+  const account = useAccount();
   const [state, setState] = useState<"long" | "short">("long");
   const [pairToken, setPairToken] = useState<Token | null>(null);
   const [volum, setVolum] = useState<string>("");
@@ -12,6 +15,9 @@ export default function Home() {
   const [tlb, setTlb] = useState<boolean>(false);
   const [takeProfit, setTakeProfit] = useState<string>("");
   const [stopLoss, setStopLoss] = useState<string>("");
+
+  const balance = useGetBalance(account,pairToken?.address ?? '');
+
   const onChangeVolum = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (!Number.isNaN(Number(value))) {
@@ -82,13 +88,14 @@ export default function Home() {
               value={volum}
               onChange={onChangeVolum}
               type="text"
-              className={`mt-4 rounded-md form-input w-full border-transparent focus:border-gray-500 border focus:bg-white focus:ring-0 ${
+              className={`mt-4 rounded-md form-input w-full focus:border-gray-500 border focus:bg-white focus:ring-0 ${
                 state === "short"
                   ? "bg-[#FFFAFB] border-[#FFD3DD]"
                   : "bg-[#F8FFFE] border-[#CAFBF2]"
               }`}
             />
           </div>
+          <div className="mt-4">Balance:{balance ?? ' -'}</div> 
           <div
             className={`mt-4 rounded-md p-2.5 flex text-gray-500 w-full border ${
               state === "short"
