@@ -24,9 +24,10 @@ margin trading on DeFi
 ***
 ## Deployments
 
-- Sepolia Swapper deployed: 0xbDC333C574a7C6AE77e93bfBf2cF6F30a9e401f3
-- Scroll Sepolia deployed: 0xf396A05d9b1868FeD3e6FBFF2325b4a6ad87440A
-- Base Sepolia deployed: 0x53dC64D8d4c4972d3a04216faD67012D273e617B
+- Sepolia 'Swapper' : 0xbDC333C574a7C6AE77e93bfBf2cF6F30a9e401f3
+- Scroll Sepolia 'Swapper' : 0xf396A05d9b1868FeD3e6FBFF2325b4a6ad87440A
+- Base Sepolia 'Swapper' : 0x53dC64D8d4c4972d3a04216faD67012D273e617B
+- Unichain Sepolia 'Swapper' : 0xe9e6Fc8767ACdCa691860510c3c929fB9Fb9ecaB 
 
 ***
 ## Project Highlights
