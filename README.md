@@ -18,7 +18,8 @@ margin trading on DeFi
 
 ***
 ## Architecture Diagram
-![image](https://github.com/meisamtaher/real-token/assets/99467399/53d9ef43-94ab-44a2-b3b4-31691da4f441)
+<img width="792" alt="Screenshot 2024-11-17 at 3 36 35 AM" src="https://github.com/user-attachments/assets/bb6e4ffa-63d2-4a4c-9171-3020f4481763">
+
 
 ***
 ## Deployments
